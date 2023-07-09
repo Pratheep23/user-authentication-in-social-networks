@@ -13,12 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
           const errorMessage = "Authentication Failed!\nTweet cannot be posted:(";
           showError(errorMessage);
         } else {
-          const tweet = tweetInputElement.value.trim();
-          if (tweet !== '') {
-            saveTweet(tweet);
-            tweetInputElement.value = '';
+            getgesturepy(function(chk1) {
+              if (chk1 !== 'fist') {
+                const errorMessage = "Authentication Failed!\nTweet cannot be posted:(";
+                showError(errorMessage);
+              } else {
+                const tweet = tweetInputElement.value.trim();
+                if (tweet !== '') {
+                  saveTweet(tweet);
+                  tweetInputElement.value = '';
+                }
+              }
+            });
           }
-        }
       });
     });
     
@@ -40,9 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       xhr.send();
     }
-    
-    
-    
+
+    function getgesturepy(callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'execute_gesture.php', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          var output = response.output && response.output.length > 0 ? response.output[response.output.length - 1] : undefined;
+          callback(output);
+        }
+      };
+      xhr.send();
+    }
   
     // Save a tweet to the CSV file
     function saveTweet(tweet) {

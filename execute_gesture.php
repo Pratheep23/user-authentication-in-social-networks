@@ -1,5 +1,5 @@
 <?php
-$pythonFilePath = 'face_reg/face-recog.py';
+$pythonFilePath = 'gesture_reg/gesture-recog.py';
 exec("python $pythonFilePath 2>&1", $output, $returnCode);
 if ($returnCode !== 0) {
   $errorMessage = "Error executing Python file: " . implode("\n", $output);
